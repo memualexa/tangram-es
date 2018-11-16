@@ -280,7 +280,10 @@ Platform::UrlRequestId AndroidPlatform::startUrlRequest(Url _url, UrlRequestHand
 
     // If the requested URL does not use HTTP or HTTPS, retrieve it asynchronously.
     if (!_url.hasHttpScheme()) {
+        LOGE("Enqueue file task");
+
         m_fileWorker.enqueue([=](){
+
              UrlResponse response;
              response.content = bytesFromFile(_url);
              onUrlResponse(_handle, std::move(response));
