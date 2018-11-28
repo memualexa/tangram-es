@@ -217,7 +217,7 @@ SceneID Map::loadSceneYamlAsync(const std::string& _yaml, const std::string& _re
 // NB: Not thread-safe. Must be called on the main/render thread!
 // (Or externally synchronized with main/render thread)
 SceneID Map::loadScene(std::unique_ptr<SceneOptions> _sceneOptions) {
-    LOGTOInit();
+
     auto newScene = std::make_shared<Scene>(*platform, std::move(_sceneOptions),
                                              std::make_unique<View>(impl->view));
 
@@ -229,7 +229,7 @@ SceneID Map::loadScene(std::unique_ptr<SceneOptions> _sceneOptions) {
         impl->lastValidScene.reset();
     }
 
-    if (SceneLoader::loadScene(newScene)) {
+    if (newScene->load()) {
         impl->setScene(newScene);
 
         {
@@ -249,8 +249,7 @@ SceneID Map::loadScene(std::unique_ptr<SceneOptions> _sceneOptions) {
 }
 
 SceneID Map::loadSceneAsync(std::unique_ptr<SceneOptions> _sceneOptions) {
-    LOGTOInit();
-    LOGTO("loadSceneAsync >>>>>>>>>>>>>>> RESET TIME >>>>>>>>>>>>>>>");
+
     impl->framesRendered = 0;
 
     auto newScene = std::make_shared<Scene>(*platform, std::move(_sceneOptions),
@@ -259,7 +258,7 @@ SceneID Map::loadSceneAsync(std::unique_ptr<SceneOptions> _sceneOptions) {
 
     runAsyncTask([newScene, this](){
 
-            bool newSceneLoaded = SceneLoader::loadScene(newScene);
+            bool newSceneLoaded = newScene->load();
             if (!newSceneLoaded) {
 
                 if (impl->onSceneReady) {
