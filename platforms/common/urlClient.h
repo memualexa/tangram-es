@@ -23,16 +23,19 @@ public:
     UrlClient(Options options);
     ~UrlClient();
 
-    UrlRequestHandle addRequest(const std::string& url, UrlCallback onComplete);
+    using Callback = std::function<void(UrlResponse&&)>;
+    using RequestId = uint64_t;
 
-    void cancelRequest(UrlRequestHandle request);
+    RequestId addRequest(const std::string& url, Callback cb);
+
+    void cancelRequest(RequestId request);
 
 private:
 
     struct Request {
         std::string url;
-        UrlCallback callback;
-        UrlRequestHandle handle;
+        Callback callback;
+        RequestId id;
         bool canceled;
     };
 

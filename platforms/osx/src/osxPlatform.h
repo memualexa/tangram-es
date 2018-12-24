@@ -13,10 +13,11 @@ public:
 
     OSXPlatform();
     ~OSXPlatform() override;
+    void shutdown() override {}
     void requestRender() const override;
     std::vector<FontSourceHandle> systemFontFallbacksHandle() const override;
-    UrlRequestHandle startUrlRequest(Url _url, UrlCallback _callback) override;
-    void cancelUrlRequest(UrlRequestHandle _request) override;
+    UrlRequestId startUrlRequest(Url _url, UrlRequestHandle _request) override;
+    void urlRequestCanceled(UrlRequestId _id) override;
 
     FontSourceHandle systemFont(const std::string& _name, const std::string& _weight, const std::string& _face) const override;
 
