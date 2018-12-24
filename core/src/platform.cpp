@@ -5,6 +5,9 @@
 #include <string>
 #include <cassert>
 
+std::chrono::time_point<std::chrono::system_clock> tangram_log_time_start, tangram_log_time_last;
+std::mutex tangram_log_time_mutex;
+
 namespace Tangram {
 
 Platform::Platform() : m_continuousRendering(false) {}
